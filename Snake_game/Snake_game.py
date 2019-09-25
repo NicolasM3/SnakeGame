@@ -15,6 +15,7 @@ CIMA = 0
 BAIXO = 1
 ESQUERDA = 2
 DIREITA = 3
+morreu = False
 
 pygame.init()
 
@@ -26,12 +27,12 @@ while True:
     #  cobrinha
     cobrinha = [(200, 200), (210, 200), (220, 200)]
     cobrinhaCor = pygame.Surface((10,10))
-    cobrinhaCor.fill((255, 0, 0))
+    cobrinhaCor.fill((0, 0, 255))
     direcao = ESQUERDA
 
     #  maça
     maca = pygame.Surface((10,10))
-    maca.fill((255, 255, 255))
+    maca.fill((255, 0, 0))
     macaPosicao = (random_grid()) 
 
     clock = pygame.time.Clock()
@@ -76,7 +77,12 @@ while True:
 
         #  verificando colisão com a parede
         if ((cobrinha[0][0] == -10) or (cobrinha[0][0] == 600) or (cobrinha[0][1] == 600) or (cobrinha[0][1] == -10)):
-            break
+            morreu = True
+
+        #  verificando colisão com a cobra
+        for i in range(2, len(cobrinha)):
+            if(cobrinha[0] == cobrinha[i]):
+                morreu = True
 
         #  mudando a direção da cabeça da cobra
         if direcao == CIMA:
@@ -95,6 +101,10 @@ while True:
         #  reposicionando a ultima parte para o sucessor
         for i in range(len(cobrinha) - 1, 0, -1):
             cobrinha[i] = (cobrinha[i - 1][0], cobrinha[i - 1][1])
+        
+        if(morreu):
+            print("Morreu")
+            break
 
         #  atualiza o display
         pygame.display.update()
